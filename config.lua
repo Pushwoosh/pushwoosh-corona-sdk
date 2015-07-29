@@ -10,14 +10,14 @@ application =
 	},
 
 	notification =
-    {
-        google = { projectNumber = "611761906259", },
-        iphone =
-        {
-            types =
-            {
-                "badge", "sound", "alert"
-            }
-        }
-    }
+	{
+		google = { projectNumber = "YOUR_GOOGLE_PROJECT_NUMBER_HERE", },
+		iphone =
+		{
+			types =
+			{
+				"badge", "sound", "alert"
+			}
+		}
+	}
 }

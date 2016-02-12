@@ -7,6 +7,14 @@ local pw_app_code = {}
 
 local TAG = "[Pushwoosh] "
 
+local function getTimezoneOffset(ts)
+	local utcdate   = os.date("!*t", ts)
+	local localdate = os.date("*t", ts)
+	localdate.isdst = false -- this is the trick
+	return os.difftime(os.time(localdate), os.time(utcdate))
+end
+
+
 local function sendRequest( method, args, success, fail )
 	local PW_URL = "https://cp.pushwoosh.com/json/1.3/" .. method
 
@@ -52,7 +60,7 @@ local function registerDevice( pushToken, app_code )
 			["push_token"] = pushToken,
 			["language"] = system.getPreference("ui", "language"),
 			["hwid"] = system.getInfo("deviceID"),
-			["timezone"] = 3600, -- offset in seconds
+			["timezone"] = getTimezoneOffset(os.time()),
 			["device_type"] = deviceType
 		}
 	}

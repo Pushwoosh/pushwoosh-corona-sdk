@@ -50,7 +50,7 @@ end
 
 local function registerDevice( pushToken, app_code )
 	local deviceType = 1 -- default to iOS
-	if ( system.getInfo("platformName") == "Android" ) then
+	if ( system.getInfo("platform") == "android" ) then
 			deviceType = 3
 	end
 
@@ -116,9 +116,9 @@ end
 local function sendStat( event )
 	hash = nil
 
-	if ( system.getInfo("platformName") == "iPhone OS" ) then
+	if ( system.getInfo("platform") == "ios" ) then
 		hash = event.custom.pw.p
-	elseif ( system.getInfo("platformName") == "Android" ) then
+	elseif ( system.getInfo("platform") == "android" ) then
 		hash = event.androidGcmBundle.p
 	end
 
@@ -165,7 +165,7 @@ function pushwoosh.registerForPushNotifications( app_code, launchArgs )
 	Runtime:addEventListener( "notification", onNotification )
 
 	-- For iOS, the app must explicitly register for push notifications 
-	if ( system.getInfo("platformName") == "iPhone OS" ) then
+	if ( system.getInfo("platform") == "ios" ) then
 		local notifications = require( "plugin.notifications" )
 		notifications.registerForPushNotifications()
 	end

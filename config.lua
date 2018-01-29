@@ -11,7 +11,6 @@ application =
 
 	notification =
 	{
-		google = { projectNumber = "YOUR_GOOGLE_PROJECT_NUMBER_HERE", },
 		iphone =
 		{
 			types =

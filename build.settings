@@ -7,7 +7,7 @@ settings =
 {
 	plugins =
 	{
-		["plugin.notifications"] =
+		["plugin.notifications.v2"] =
 		{
 			publisherId = "com.coronalabs"
 		},
@@ -40,10 +40,14 @@ settings =
 				"Icon-Small-50.png", 
 				"Icon-Small-50@2x.png",
 			},
+			UIBackgroundModes = { "remote-notification" },
+            FirebaseAppDelegateProxyEnabled = false,
+			CFBundleIdentifier = "com.pushwoosh.demoapp",
 		},
 	},
 	android =
 	{
+		useGoogleServicesJson = true,
 		permissions =
 		{
 			{ name = ".permission.C2D_MESSAGE", protectionLevel = "signature" },

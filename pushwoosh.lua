@@ -114,13 +114,7 @@ local function sendDeliveryMessage( app_code, hash )
 end
 
 local function sendStat( event )
-	hash = nil
-
-	if ( system.getInfo("platform") == "ios" ) then
-		hash = event.custom.pw.p
-	elseif ( system.getInfo("platform") == "android" ) then
-		hash = event.androidGcmBundle.p
-	end
+	hash = event.p
 
 	if ( hash ~= nil ) then
 		-- We cannot track message delivery until user opens it
@@ -142,9 +136,16 @@ local function onNotification( event )
 		if ( event.androidGcmBundle ~= nil and event.androidGcmBundle.from == "google.com/iid" ) then
 			print( TAG .. "Warning! GCM registration token may be invalid. Try reregister with GCM." )
 		else
-			sendStat(event)
+			payload = nil
+			if ( system.getInfo("platform") == "ios" ) then
+				payload = json.decode(event.iosPayload)
+			elseif ( system.getInfo("platform") == "android" ) then
+				payload = event.androidPayload
+			end
 
-			local notificationEvent = { name="pushwoosh-notification", data=event }
+			sendStat(payload)
+
+			local notificationEvent = { name="pushwoosh-notification", data=event, payload=payload }
 			Runtime:dispatchEvent( notificationEvent )
 		end
 	end
@@ -166,7 +167,7 @@ function pushwoosh.registerForPushNotifications( app_code, launchArgs )
 
 	-- For iOS, the app must explicitly register for push notifications 
 	if ( system.getInfo("platform") == "ios" ) then
-		local notifications = require( "plugin.notifications" )
+		local notifications = require( "plugin.notifications.v2" )
 		notifications.registerForPushNotifications()
 	end
 end

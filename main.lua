@@ -6,7 +6,7 @@ local background = display.newImage( "pw_logo.png", display.contentCenterX, disp
 
 
 local function onNotification( event )
-	native.showAlert( "remote notification", json.encode( event.data ), { "OK" } )
+	native.showAlert( "remote notification", json.encode( event.payload ), { "OK" } )
 end
 
 local function onRegistrationSuccess( event )

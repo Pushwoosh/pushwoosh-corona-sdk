@@ -130,6 +130,7 @@ end
 local function onNotification( event )
 	print( TAG .. "onNotification: " .. json.encode(event) )
 	if event.type == "remoteRegistration" then
+		print( TAG .. "Recived push token: " .. event.token )
  		registerDevice( event.token, pw_app_code )
 	elseif ( event.type == "remote" ) then
 		-- filter out GCM service notification
@@ -137,15 +138,18 @@ local function onNotification( event )
 			print( TAG .. "Warning! GCM registration token may be invalid. Try reregister with GCM." )
 		else
 			payload = nil
+			alert = nil
 			if ( system.getInfo("platform") == "ios" ) then
 				payload = json.decode(event.iosPayload)
+				alert = payload.aps.alert
 			elseif ( system.getInfo("platform") == "android" ) then
 				payload = event.androidPayload
+				alert = payload.title
 			end
 
 			sendStat(payload)
 
-			local notificationEvent = { name="pushwoosh-notification", data=event, payload=payload }
+			local notificationEvent = { name="pushwoosh-notification", data=event, payload=payload, alert=alert }
 			Runtime:dispatchEvent( notificationEvent )
 		end
 	end

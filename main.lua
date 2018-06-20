@@ -6,7 +6,10 @@ local background = display.newImage( "pw_logo.png", display.contentCenterX, disp
 
 
 local function onNotification( event )
-	native.showAlert( "remote notification", event.alert, { "OK" } )
+	if event.title == nil then
+		event.title = "push notification"
+	end
+	native.showAlert( event.title, event.alert, { "OK" } )
 	print("[Pushwoosh] Received push notification" .. json.encode( event.payload ))
 end
 

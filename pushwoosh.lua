@@ -139,17 +139,25 @@ local function onNotification( event )
 		else
 			payload = nil
 			alert = nil
+			title = nil
 			if ( system.getInfo("platform") == "ios" ) then
 				payload = json.decode(event.iosPayload)
-				alert = payload.aps.alert
+				if type(payload.aps.alert) == "string" then
+					alert = payload.aps.alert
+				else
+					alert = payload.aps.alert.body
+					title = payload.aps.alert.title
+				end
+
 			elseif ( system.getInfo("platform") == "android" ) then
 				payload = event.androidPayload
 				alert = payload.title
+				title = payload.header
 			end
 
 			sendStat(payload)
 
-			local notificationEvent = { name="pushwoosh-notification", data=event, payload=payload, alert=alert }
+			local notificationEvent = { name="pushwoosh-notification", data=event, payload=payload, alert=alert, title=title }
 			Runtime:dispatchEvent( notificationEvent )
 		end
 	end
